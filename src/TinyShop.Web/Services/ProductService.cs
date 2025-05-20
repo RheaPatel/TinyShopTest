@@ -12,10 +12,10 @@ public class ProductService
         _httpClient = httpClient;
     }
 
-    public async Task<List<Product>> GetProductsAsync()
+    public Task<List<Product>> GetProductsAsync()
     {
         // For now, return mock data to demonstrate UI
-        return new List<Product>
+        List<Product> products = new()
         {
             new Product 
             { 
@@ -78,6 +78,8 @@ public class ProductService
                 InStock = false 
             }
         };
+
+        return Task.FromResult(products);
 
         // In a real application we would call the API
         // try
