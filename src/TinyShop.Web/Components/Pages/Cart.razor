@@ -1,0 +1,137 @@
+@page "/cart"
+@rendermode InteractiveServer
+@inject CartService CartService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Your Cart - TinyShop</PageTitle>
+
+<h1>Your Shopping Cart</h1>
+
+@if (!cartItems.Any())
+{
+    <div class="empty-cart">
+        <p>Your cart is empty.</p>
+        <button class="btn btn-primary" @onclick="GoToProducts">Continue Shopping</button>
+    </div>
+}
+else
+{
+    <div class="cart-container">
+        <div class="cart-items">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in cartItems)
+                    {
+                        <tr>
+                            <td>
+                                <div class="product-info">
+                                    <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/placeholder.svg" : item.ImageUrl)" alt="@item.Name" />
+                                    <span>@item.Name</span>
+                                </div>
+                            </td>
+                            <td>$@item.Price.ToString("0.00")</td>
+                            <td>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn" @onclick="() => DecrementQuantity(item.Id)">-</button>
+                                    <span>@item.Quantity</span>
+                                    <button class="quantity-btn" @onclick="() => IncrementQuantity(item.Id)">+</button>
+                                </div>
+                            </td>
+                            <td>$@item.Total.ToString("0.00")</td>
+                            <td>
+                                <button class="btn btn-danger" @onclick="() => RemoveFromCart(item.Id)">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="cart-summary">
+            <h3>Order Summary</h3>
+            <div class="summary-item">
+                <span>Subtotal</span>
+                <span>$@cartTotal.ToString("0.00")</span>
+            </div>
+            <div class="summary-item">
+                <span>Shipping</span>
+                <span>Free</span>
+            </div>
+            <div class="summary-item total">
+                <span>Total</span>
+                <span>$@cartTotal.ToString("0.00")</span>
+            </div>
+            <button class="btn btn-success checkout-btn">Proceed to Checkout</button>
+            <button class="btn btn-outline-secondary" @onclick="ClearCart">Clear Cart</button>
+            <button class="btn btn-outline-primary continue-shopping" @onclick="GoToProducts">Continue Shopping</button>
+        </div>
+    </div>
+}
+
+@code {
+    private List<CartItem> cartItems = new();
+    private decimal cartTotal = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCartItems();
+        CartService.OnCartChanged += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        CartService.OnCartChanged -= StateHasChanged;
+    }
+
+    private async Task LoadCartItems()
+    {
+        cartItems = await CartService.GetCartItemsAsync();
+        cartTotal = CartService.GetCartTotal();
+    }
+
+    private async Task IncrementQuantity(int productId)
+    {
+        var item = cartItems.FirstOrDefault(i => i.Id == productId);
+        if (item != null)
+        {
+            await CartService.UpdateQuantityAsync(productId, item.Quantity + 1);
+            await LoadCartItems();
+        }
+    }
+
+    private async Task DecrementQuantity(int productId)
+    {
+        var item = cartItems.FirstOrDefault(i => i.Id == productId);
+        if (item != null && item.Quantity > 1)
+        {
+            await CartService.UpdateQuantityAsync(productId, item.Quantity - 1);
+            await LoadCartItems();
+        }
+    }
+
+    private async Task RemoveFromCart(int productId)
+    {
+        await CartService.RemoveFromCartAsync(productId);
+        await LoadCartItems();
+    }
+
+    private async Task ClearCart()
+    {
+        await CartService.ClearCartAsync();
+        await LoadCartItems();
+    }
+
+    private void GoToProducts()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+}

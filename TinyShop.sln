@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{977E13C4-EA1B-429D-BF3D-65B8541AA446}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyShop.Web", "src\TinyShop.Web\TinyShop.Web.csproj", "{920E5810-63D6-47EB-B9E3-FAE9EEFF7883}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyShop.Shared", "src\TinyShop.Shared\TinyShop.Shared.csproj", "{C14F509B-9A66-4A2B-AA1F-3D4FC85DC588}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{920E5810-63D6-47EB-B9E3-FAE9EEFF7883}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{920E5810-63D6-47EB-B9E3-FAE9EEFF7883}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{920E5810-63D6-47EB-B9E3-FAE9EEFF7883}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{920E5810-63D6-47EB-B9E3-FAE9EEFF7883}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C14F509B-9A66-4A2B-AA1F-3D4FC85DC588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C14F509B-9A66-4A2B-AA1F-3D4FC85DC588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C14F509B-9A66-4A2B-AA1F-3D4FC85DC588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C14F509B-9A66-4A2B-AA1F-3D4FC85DC588}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{920E5810-63D6-47EB-B9E3-FAE9EEFF7883} = {977E13C4-EA1B-429D-BF3D-65B8541AA446}
+		{C14F509B-9A66-4A2B-AA1F-3D4FC85DC588} = {977E13C4-EA1B-429D-BF3D-65B8541AA446}
+	EndGlobalSection
+EndGlobal
