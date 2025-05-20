@@ -1,0 +1,32 @@
+@page "/products"
+@using TinyShop.Shared.Models
+@using TinyShop.Web.Services
+@rendermode InteractiveServer
+@inject ProductService ProductService
+
+<PageTitle>Products - TinyShop</PageTitle>
+
+<h1>Products</h1>
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="products-grid">
+        @foreach (var product in products)
+        {
+            <ProductCard Product="product" />
+        }
+    </div>
+}
+
+@code {
+    private List<Product>? products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductService.GetProductsAsync();
+    }
+}

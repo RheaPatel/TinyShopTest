@@ -23,7 +23,7 @@ public class ProductService
                 Name = "Smartphone X", 
                 Description = "Latest smartphone with advanced features", 
                 Price = 999.99m, 
-                ImageUrl = "/images/smartphone.jpg", 
+                ImageUrl = "/images/smartphone.svg", 
                 Rating = 5, 
                 InStock = true 
             },
@@ -33,7 +33,7 @@ public class ProductService
                 Name = "Laptop Pro", 
                 Description = "Powerful laptop for professionals", 
                 Price = 1499.99m, 
-                ImageUrl = "/images/laptop.jpg", 
+                ImageUrl = "/images/laptop.svg", 
                 Rating = 4, 
                 InStock = true 
             },
@@ -43,7 +43,7 @@ public class ProductService
                 Name = "Wireless Earbuds", 
                 Description = "High-quality wireless earbuds", 
                 Price = 149.99m, 
-                ImageUrl = "/images/earbuds.jpg", 
+                ImageUrl = "/images/earbuds.svg", 
                 Rating = 4, 
                 InStock = true 
             },
@@ -53,7 +53,7 @@ public class ProductService
                 Name = "Smart Watch", 
                 Description = "Fitness and health tracking smart watch", 
                 Price = 249.99m, 
-                ImageUrl = "/images/smartwatch.jpg", 
+                ImageUrl = "/images/smartwatch.svg", 
                 Rating = 3, 
                 InStock = false 
             },
@@ -63,7 +63,7 @@ public class ProductService
                 Name = "Bluetooth Speaker", 
                 Description = "Portable Bluetooth speaker with great sound", 
                 Price = 89.99m, 
-                ImageUrl = "/images/speaker.jpg", 
+                ImageUrl = "/images/speaker.svg", 
                 Rating = 5, 
                 InStock = true 
             },
@@ -73,7 +73,7 @@ public class ProductService
                 Name = "Gaming Console", 
                 Description = "Next-gen gaming console", 
                 Price = 499.99m, 
-                ImageUrl = "/images/console.jpg", 
+                ImageUrl = "/images/console.svg", 
                 Rating = 5, 
                 InStock = false 
             }

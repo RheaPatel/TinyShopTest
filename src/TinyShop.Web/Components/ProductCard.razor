@@ -1,0 +1,36 @@
+@using TinyShop.Shared.Models
+
+<div class="product-card @(Product.InStock ? "" : "out-of-stock")">
+    <div class="product-image">
+        <img src="@(string.IsNullOrEmpty(Product.ImageUrl) ? "/images/placeholder.svg" : Product.ImageUrl)" alt="@Product.Name" />
+    </div>
+    <div class="product-info">
+        <div class="product-name">@Product.Name</div>
+        <div class="product-description">@Product.Description</div>
+        <div class="product-rating">
+            @for (int i = 0; i < 5; i++)
+            {
+                <span class="star @(i < Product.Rating ? "filled" : "")">★</span>
+            }
+        </div>
+        <div class="product-price">$@Product.Price.ToString("0.00")</div>
+        <div class="product-availability">
+            @if (Product.InStock)
+            {
+                <span class="in-stock">In Stock</span>
+            }
+            else
+            {
+                <span class="out-of-stock">Out of Stock</span>
+            }
+        </div>
+        <button class="add-to-cart-button" disabled="@(!Product.InStock)">
+            @(Product.InStock ? "Add to Cart" : "Out of Stock")
+        </button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Product Product { get; set; } = default!;
+}
