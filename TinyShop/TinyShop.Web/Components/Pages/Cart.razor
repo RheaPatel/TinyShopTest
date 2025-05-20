@@ -1,0 +1,64 @@
+@page "/cart"
+@using TinyShop.Web.Models
+@using TinyShop.Web.Services
+@inject CartService CartService
+
+<PageTitle>Cart - TinyShop</PageTitle>
+
+<h1>Shopping Cart</h1>
+
+@if (!CartService.CartItems.Any())
+{
+    <div class="alert alert-info">
+        Your cart is empty. <a href="/products">Continue shopping</a>
+    </div>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in CartService.CartItems)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>$@item.Product.Price.ToString("F2")</td>
+                    <td>@item.Quantity</td>
+                    <td>$@((item.Product.Price * item.Quantity).ToString("F2"))</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" @onclick="() => RemoveFromCart(item.Product.Id)">
+                            <span class="oi oi-trash"></span>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                <td>$@CartService.TotalPrice.ToString("F2")</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <div class="d-flex justify-content-between">
+        <a href="/products" class="btn btn-primary">Continue Shopping</a>
+        <button class="btn btn-success">Checkout</button>
+    </div>
+}
+
+@code {
+    private void RemoveFromCart(int productId)
+    {
+        CartService.RemoveFromCart(productId);
+    }
+}

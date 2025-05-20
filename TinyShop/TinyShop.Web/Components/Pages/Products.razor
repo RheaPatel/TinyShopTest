@@ -1,0 +1,46 @@
+@page "/products"
+@using TinyShop.Web.Models
+@using TinyShop.Web.Services
+@inject ProductService ProductService
+@inject CartService CartService
+
+<PageTitle>Products - TinyShop</PageTitle>
+
+<h1>Products</h1>
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        @foreach (var product in products)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: contain; padding: 10px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text text-end fw-bold">$@product.Price.ToString("F2")</p>
+                        <button class="btn btn-primary" @onclick="() => AddToCart(product)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private IEnumerable<Product>? products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductService.GetProductsAsync();
+    }
+
+    private void AddToCart(Product product)
+    {
+        CartService.AddToCart(product);
+    }
+}

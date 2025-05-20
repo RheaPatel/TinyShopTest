@@ -1,0 +1,16 @@
+@using TinyShop.Web.Services
+@inject CartService CartService
+
+<div class="cart-summary">
+    <a href="/cart" class="btn btn-outline-light">
+        <i class="oi oi-cart"></i>
+        <span class="ms-1">Cart (@CartService.TotalItems)</span>
+    </a>
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        // We would ideally use CartService.CartUpdated event here for real-time updates
+    }
+}
