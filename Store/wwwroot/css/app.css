@@ -1,0 +1,27 @@
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    margin: 0;
+    padding: 0;
+}
+
+.hero-section {
+    padding: 4rem 0;
+    background-color: #f8f9fa;
+    border-radius: 1rem;
+    margin-bottom: 2rem;
+    padding: 4rem 2rem;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
+}
+
+.page {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 5rem;
+}

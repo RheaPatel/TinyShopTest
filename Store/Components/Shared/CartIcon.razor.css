@@ -1,0 +1,26 @@
+.cart-icon-container {
+    position: relative;
+}
+
+.cart-icon-btn {
+    position: relative;
+    color: #333;
+    font-size: 1.2rem;
+    padding: 0.5rem;
+}
+
+.cart-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(25%, -25%);
+    font-size: 0.7rem;
+}
+
+.cart-dropdown-wrapper {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    z-index: 1000;
+    margin-top: 0.5rem;
+}

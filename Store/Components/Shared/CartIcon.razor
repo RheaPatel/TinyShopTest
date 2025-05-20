@@ -1,0 +1,40 @@
+@using TinyShop.Store.Services
+@inject CartService CartService
+
+<div class="cart-icon-container">
+    <button @onclick="ToggleCartVisibility" class="btn btn-link cart-icon-btn">
+        <i class="oi oi-cart"></i>
+        @if (CartService.TotalItems > 0)
+        {
+            <span class="badge bg-primary cart-badge">@CartService.TotalItems</span>
+        }
+    </button>
+
+    @if (isCartVisible)
+    {
+        <div class="cart-dropdown-wrapper">
+            <Cart />
+        </div>
+    }
+</div>
+
+@code {
+    private bool isCartVisible = false;
+
+    protected override void OnInitialized()
+    {
+        // Subscribe to cart changes
+        CartService.OnCartChanged += StateHasChanged;
+    }
+
+    private void ToggleCartVisibility()
+    {
+        isCartVisible = !isCartVisible;
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe from event when component is disposed
+        CartService.OnCartChanged -= StateHasChanged;
+    }
+}
