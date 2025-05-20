@@ -1,0 +1,6 @@
+@TinyShop.Api_HostAddress = http://localhost:5037
+
+GET {{TinyShop.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
