@@ -1,0 +1,26 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B22DA34A-E2E1-4A82-B127-F9DA3CE093F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyShop.Web", "src\\TinyShop.Web\\TinyShop.Web.csproj", "{0ABE133C-9CA9-4D6A-8E47-40BD89792C1A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0ABE133C-9CA9-4D6A-8E47-40BD89792C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ABE133C-9CA9-4D6A-8E47-40BD89792C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ABE133C-9CA9-4D6A-8E47-40BD89792C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ABE133C-9CA9-4D6A-8E47-40BD89792C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0ABE133C-9CA9-4D6A-8E47-40BD89792C1A} = {B22DA34A-E2E1-4A82-B127-F9DA3CE093F0}
+	EndGlobalSection
+EndGlobal
