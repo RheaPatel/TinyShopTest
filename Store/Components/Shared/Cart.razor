@@ -1,0 +1,78 @@
+@using TinyShop.Store.Services
+@inject CartService CartService
+
+<div class="cart-dropdown">
+    <div class="cart-header">
+        <h5>Your Cart</h5>
+        <span class="cart-count">@CartService.TotalItems items</span>
+    </div>
+    
+    @if (!CartService.CartItems.Any())
+    {
+        <div class="empty-cart">
+            <p>Your cart is empty</p>
+        </div>
+    }
+    else
+    {
+        <div class="cart-items">
+            @foreach (var item in CartService.CartItems)
+            {
+                <div class="cart-item">
+                    <div class="item-info">
+                        <h6>@item.Product.Name</h6>
+                        <div class="item-price-qty">
+                            <span class="item-price">$@item.Product.Price.ToString("0.00")</span>
+                            <div class="item-qty">
+                                <button class="btn btn-sm btn-outline-secondary" @onclick="() => UpdateQuantity(item.Product.Id, item.Quantity - 1)">-</button>
+                                <span class="qty-value">@item.Quantity</span>
+                                <button class="btn btn-sm btn-outline-secondary" @onclick="() => UpdateQuantity(item.Product.Id, item.Quantity + 1)">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-sm btn-danger remove-item" @onclick="() => RemoveItem(item.Product.Id)">
+                        <span class="oi oi-x"></span>
+                    </button>
+                </div>
+            }
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span class="total-price">$@CartService.TotalPrice.ToString("0.00")</span>
+            </div>
+            <button class="btn btn-primary checkout-btn">Checkout</button>
+            <button class="btn btn-outline-secondary clear-cart-btn" @onclick="ClearCart">Clear Cart</button>
+        </div>
+    }
+</div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        // This ensures that the component is rerendered when the cart changes
+        CartService.OnCartChanged += StateHasChanged;
+    }
+
+    private void UpdateQuantity(int productId, int quantity)
+    {
+        CartService.UpdateQuantity(productId, quantity);
+    }
+
+    private void RemoveItem(int productId)
+    {
+        CartService.RemoveFromCart(productId);
+    }
+
+    private void ClearCart()
+    {
+        CartService.ClearCart();
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe from event when component is disposed
+        CartService.OnCartChanged -= StateHasChanged;
+    }
+}
