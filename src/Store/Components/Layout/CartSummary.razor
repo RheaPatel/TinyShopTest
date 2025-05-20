@@ -1,0 +1,88 @@
+@using Store.Services
+@inject CartService CartService
+@implements IDisposable
+
+<div class="cart-summary">
+    <a href="#" class="cart-icon position-relative" @onclick="ToggleCartPreview" @onclick:preventDefault>
+        <i class="bi bi-cart3"></i>
+        @if (itemCount > 0)
+        {
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                @itemCount
+            </span>
+        }
+    </a>
+
+    @if (showPreview)
+    {
+        <div class="cart-preview">
+            <div class="cart-header">
+                <h5 class="mb-0">Shopping Cart</h5>
+                <button class="btn-close" @onclick="ToggleCartPreview"></button>
+            </div>
+            
+            @if (CartService.GetCartItemsCount() == 0)
+            {
+                <div class="empty-cart">
+                    <p>Your cart is empty</p>
+                </div>
+            }
+            else
+            {
+                <div class="cart-items">
+                    @foreach (var item in CartService.GetCartItems())
+                    {
+                        <div class="cart-item">
+                            <div class="item-image">
+                                <img src="@item.ImageUrl" alt="@item.ProductName" />
+                            </div>
+                            <div class="item-details">
+                                <div class="item-name">@item.ProductName</div>
+                                <div class="item-price">$@item.Price.ToString("0.00") x @item.Quantity</div>
+                            </div>
+                            <div class="item-total">
+                                $@item.Total.ToString("0.00")
+                            </div>
+                        </div>
+                    }
+                </div>
+                
+                <div class="cart-footer">
+                    <div class="cart-total">
+                        <span>Total:</span>
+                        <span>$@CartService.GetCartTotal().ToString("0.00")</span>
+                    </div>
+                    <button class="btn btn-outline-danger w-100" @onclick="ClearCart">Clear Cart</button>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private int itemCount = 0;
+    private bool showPreview = false;
+
+    protected override void OnInitialized()
+    {
+        itemCount = CartService.GetCartItemsCount();
+        CartService.OnChange += StateHasChanged;
+    }
+
+    private void ToggleCartPreview()
+    {
+        showPreview = !showPreview;
+        itemCount = CartService.GetCartItemsCount();
+    }
+
+    private void ClearCart()
+    {
+        CartService.ClearCart();
+        itemCount = 0;
+    }
+
+    public void Dispose()
+    {
+        CartService.OnChange -= StateHasChanged;
+    }
+}

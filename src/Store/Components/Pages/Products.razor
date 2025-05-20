@@ -1,0 +1,51 @@
+@page "/products"
+@using Store.Models
+@using Store.Services
+@inject ProductService ProductService
+@inject CartService CartService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Products - TinyShop</PageTitle>
+
+<h1>Products</h1>
+
+<div class="row mt-4">
+    @foreach (var product in products)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-img-top-container">
+                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Description</p>
+                    <p class="price">$@product.Price.ToString("0.00")</p>
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-primary" @onclick="() => ViewProductDetails(product.Id)">Details</button>
+                        <button class="btn btn-success" @onclick="() => AddToCart(product)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Product> products = new();
+
+    protected override void OnInitialized()
+    {
+        products = ProductService.GetAllProducts();
+    }
+
+    private void ViewProductDetails(int productId)
+    {
+        NavigationManager.NavigateTo($"/products/{productId}");
+    }
+
+    private void AddToCart(Product product)
+    {
+        CartService.AddToCart(product);
+    }
+}

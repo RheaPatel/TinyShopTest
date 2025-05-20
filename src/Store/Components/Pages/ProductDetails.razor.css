@@ -1,0 +1,21 @@
+.product-image {
+    max-height: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-description {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 20px 0;
+}
+
+.product-category, .product-stock {
+    color: #6c757d;
+}
+
+.product-price {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #198754;
+}

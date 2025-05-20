@@ -1,10 +1,15 @@
 using Store.Components;
+using Store.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+// Register application services
+builder.Services.AddSingleton<ProductService>();
+builder.Services.AddScoped<CartService>();
 
 var app = builder.Build();
 
