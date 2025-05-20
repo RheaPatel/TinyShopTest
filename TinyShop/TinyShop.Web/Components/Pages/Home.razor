@@ -1,0 +1,17 @@
+﻿@page "/"
+@inject NavigationManager NavigationManager
+
+<PageTitle>TinyShop - Home</PageTitle>
+
+<h1>Welcome to TinyShop</h1>
+
+<p>Browse our products and add them to your cart.</p>
+
+<a href="/products" class="btn btn-primary">Shop Now</a>
+
+@code {
+    protected override void OnInitialized()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+}
