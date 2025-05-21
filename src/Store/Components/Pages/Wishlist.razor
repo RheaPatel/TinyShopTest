@@ -1,0 +1,93 @@
+@page "/wishlist"
+@using DataEntities
+@using Store.Services
+@inject WishlistService WishlistService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Wishlist</PageTitle>
+
+<h1>My Wishlist</h1>
+
+@if (_loading)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else if (!_wishlistItems.Any())
+{
+    <div class="alert alert-info" role="alert">
+        Your wishlist is empty. <a href="/products" class="alert-link">Browse our products</a> to add items to your wishlist.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Date Added</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in _wishlistItems)
+                {
+                    <tr>
+                        <td class="align-middle" style="max-width: 100px;">
+                            <img src="@item.Product?.ImageUrl" class="img-fluid" alt="@item.Product?.Name">
+                        </td>
+                        <td class="align-middle">
+                            <h5>@item.Product?.Name</h5>
+                            <p class="mb-0 text-muted">@item.Product?.Description</p>
+                        </td>
+                        <td class="align-middle">$@item.Product?.Price.ToString("0.00")</td>
+                        <td class="align-middle">@item.DateAdded.ToString("MMM dd, yyyy")</td>
+                        <td class="align-middle">
+                            <button class="btn btn-danger btn-sm" @onclick="() => RemoveFromWishlistAsync(item.Id)">
+                                <i class="oi oi-trash"></i> Remove
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="d-flex justify-content-between mt-4">
+        <a href="/products" class="btn btn-outline-primary">Continue Shopping</a>
+    </div>
+}
+
+@code {
+    private List<WishlistItem> _wishlistItems = new();
+    private bool _loading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadWishlistItemsAsync();
+    }
+
+    private async Task LoadWishlistItemsAsync()
+    {
+        _loading = true;
+        _wishlistItems = await WishlistService.GetWishlistItemsAsync();
+        _loading = false;
+    }
+
+    private async Task RemoveFromWishlistAsync(int wishlistItemId)
+    {
+        var result = await WishlistService.RemoveFromWishlistAsync(wishlistItemId);
+        
+        if (result)
+        {
+            // Refresh the list
+            await LoadWishlistItemsAsync();
+        }
+    }
+}
