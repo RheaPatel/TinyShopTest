@@ -1,0 +1,58 @@
+@using TinyShop.Store.Services
+@inject CartService CartService
+@implements IDisposable
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/">TinyShop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/products">Products</a>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <a href="/cart" class="btn btn-outline-dark position-relative">
+                    <i class="bi bi-cart3"></i>
+                    <span class="ms-1">Cart</span>
+                    @if (_cartItemCount > 0)
+                    {
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            @_cartItemCount
+                        </span>
+                    }
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+@code {
+    private int _cartItemCount = 0;
+    
+    protected override void OnInitialized()
+    {
+        // Subscribe to cart changed event
+        CartService.OnCartChanged += UpdateCartCount;
+        UpdateCartCount();
+    }
+    
+    public void Dispose()
+    {
+        // Unsubscribe from cart changed event
+        CartService.OnCartChanged -= UpdateCartCount;
+    }
+    
+    private void UpdateCartCount()
+    {
+        _cartItemCount = CartService.GetTotalItems();
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TinyShop.Store", "Store\TinyShop.Store.csproj", "{EAFED4BC-F95D-4A42-B803-90FCDF98471C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EAFED4BC-F95D-4A42-B803-90FCDF98471C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAFED4BC-F95D-4A42-B803-90FCDF98471C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAFED4BC-F95D-4A42-B803-90FCDF98471C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAFED4BC-F95D-4A42-B803-90FCDF98471C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {7D17B5D7-A3A3-4A2F-8F5A-887F1BA0940D}
+	EndGlobalSection
+EndGlobal
