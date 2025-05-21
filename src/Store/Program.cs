@@ -12,6 +12,7 @@ builder.Services.AddHttpClient<ProductService>(client =>
     client.BaseAddress = new Uri("https://localhost:7001");
 });
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<WishlistService>();
 
 // Add session support

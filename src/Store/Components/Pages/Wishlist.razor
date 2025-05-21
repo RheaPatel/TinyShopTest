@@ -1,6 +1,7 @@
 @page "/wishlist"
 @using DataEntities
 @using Store.Services
+@using Store.Components.Shared
 @inject WishlistService WishlistService
 @inject NavigationManager NavigationManager
 
@@ -64,9 +65,17 @@ else
     </div>
 }
 
+<Notification 
+    IsVisible="@_showToast"
+    Title="Wishlist"
+    Message="Item removed from wishlist"
+    Type="info"
+    OnClose="@(() => _showToast = false)" />
+
 @code {
     private List<WishlistItem> _wishlistItems = new();
     private bool _loading = true;
+    private bool _showToast = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -88,6 +97,17 @@ else
         {
             // Refresh the list
             await LoadWishlistItemsAsync();
+            
+            // Show notification
+            _showToast = true;
+            
+            // Auto-hide toast after 3 seconds
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(3000);
+                _showToast = false;
+                await InvokeAsync(StateHasChanged);
+            });
         }
     }
 }

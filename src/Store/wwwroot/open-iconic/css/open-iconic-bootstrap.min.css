@@ -1,0 +1,26 @@
+/* Open-iconic reference for icons - will be replaced with actual CSS in production */
+
+.oi {
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.oi-heart:before {
+  content: "♥";
+}
+
+.oi-home:before {
+  content: "⌂";
+}
+
+.oi-list-rich:before {
+  content: "☰";
+}
+
+.oi-trash:before {
+  content: "🗑";
+}
