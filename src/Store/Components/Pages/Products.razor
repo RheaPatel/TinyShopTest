@@ -1,0 +1,111 @@
+@page "/products"
+@using DataEntities
+@using Store.Services
+@using Store.Components.Shared
+@inject ProductService ProductService
+@inject WishlistService WishlistService
+
+<PageTitle>Products</PageTitle>
+
+<h1>Products</h1>
+
+@if (_loading)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+}
+else if (!_products.Any())
+{
+    <div class="alert alert-info" role="alert">
+        No products available.
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var product in _products)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Description</p>
+                        <p class="card-text"><strong>Price: $@product.Price.ToString("0.00")</strong></p>
+                        <p class="card-text">
+                            <small class="text-muted">
+                                @(product.StockQuantity > 0 ? $"{product.StockQuantity} in stock" : "Out of stock")
+                            </small>
+                        </p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary" disabled="@(product.StockQuantity <= 0)">
+                                Add to Cart
+                            </button>
+                            <button class="btn @(_addedToWishlist.Contains(product.Id) ? "btn-success" : "btn-outline-secondary")" 
+                                    @onclick="() => AddToWishlistAsync(product.Id)">
+                                <i class="oi oi-heart"></i> 
+                                @(_addedToWishlist.Contains(product.Id) ? "Added" : "Wishlist")
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<Notification 
+    IsVisible="@_showToast"
+    Title="Wishlist"
+    Message="Product added to wishlist!"
+    Type="success"
+    ActionText="View Wishlist"
+    OnAction="@ViewWishlist"
+    OnClose="@(() => _showToast = false)" />
+
+@code {
+    private List<Product> _products = new();
+    private bool _loading = true;
+    private HashSet<int> _addedToWishlist = new();
+    private bool _showToast = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _loading = true;
+        
+        _products = (await ProductService.GetProductsAsync()).ToList();
+        
+        // Check which products are already in the wishlist
+        var wishlistItems = await WishlistService.GetWishlistItemsAsync();
+        _addedToWishlist = new HashSet<int>(wishlistItems.Select(w => w.ProductId));
+        
+        _loading = false;
+    }
+
+    private async Task AddToWishlistAsync(int productId)
+    {
+        var result = await WishlistService.AddToWishlistAsync(productId);
+        
+        if (result != null)
+        {
+            _addedToWishlist.Add(productId);
+            _showToast = true;
+            
+            // Auto-hide toast after 5 seconds
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(5000);
+                _showToast = false;
+                await InvokeAsync(StateHasChanged);
+            });
+        }
+    }
+    
+    private void ViewWishlist()
+    {
+        WishlistService.NavigateToWishlist();
+    }
+}

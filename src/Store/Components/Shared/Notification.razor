@@ -1,0 +1,64 @@
+@if (IsVisible)
+{
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 5">
+        <div class="toast show @BackgroundClass" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">@Title</strong>
+                <button type="button" class="btn-close" @onclick="Close"></button>
+            </div>
+            <div class="toast-body text-white">
+                @Message
+                @if (!string.IsNullOrEmpty(ActionLink) && !string.IsNullOrEmpty(ActionText))
+                {
+                    <button class="btn btn-sm btn-light ms-2" @onclick="OnActionClick">@ActionText</button>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public string? Title { get; set; } = "Notification";
+
+    [Parameter]
+    public string? Message { get; set; }
+
+    [Parameter]
+    public string? Type { get; set; } = "success";
+
+    [Parameter]
+    public string? ActionText { get; set; }
+
+    [Parameter]
+    public string? ActionLink { get; set; }
+
+    [Parameter]
+    public EventCallback OnAction { get; set; }
+
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
+    private string BackgroundClass => Type?.ToLower() switch
+    {
+        "success" => "bg-success",
+        "error" => "bg-danger",
+        "warning" => "bg-warning",
+        "info" => "bg-info",
+        _ => "bg-success"
+    };
+
+    private async Task Close()
+    {
+        IsVisible = false;
+        await OnClose.InvokeAsync();
+    }
+
+    private async Task OnActionClick()
+    {
+        await OnAction.InvokeAsync();
+    }
+}
