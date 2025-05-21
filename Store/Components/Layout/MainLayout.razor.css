@@ -1,0 +1,21 @@
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.footer {
+    margin-top: 3rem;
+}
+
+.success-toast {
+    background-color: #28a745 !important;
+}
+
+.error-toast {
+    background-color: #dc3545 !important;
+}

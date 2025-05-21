@@ -1,0 +1,164 @@
+@page "/cart"
+@using TinyShop.DataEntities
+@using TinyShop.Store.Services
+@inject CartService CartService
+@inject ProductService ProductService
+@inject NavigationManager NavigationManager
+@implements IDisposable
+
+<PageTitle>Shopping Cart - TinyShop</PageTitle>
+
+<h1>Shopping Cart</h1>
+
+<div class="mt-4">
+    @if (_cartItems.Count == 0)
+    {
+        <div class="empty-cart">
+            <i class="bi bi-cart-x empty-cart-icon"></i>
+            <p>Your cart is empty</p>
+            <button class="btn btn-primary" @onclick="NavigateToProducts">Continue Shopping</button>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in _cartItems)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img src="@ProductService.GetProductImageUrl(item.Product)" 
+                                         class="cart-item-image me-3" 
+                                         alt="@item.Product.Name" />
+                                    <span>@item.Product.Name</span>
+                                </div>
+                            </td>
+                            <td>$@item.Product.Price.ToString("F2")</td>
+                            <td>
+                                <div class="quantity-control">
+                                    <button class="btn btn-sm btn-outline-secondary" 
+                                            @onclick="() => DecrementQuantity(item.Product.Id)">
+                                        <i class="bi bi-dash"></i>
+                                    </button>
+                                    <span class="mx-2">@item.Quantity</span>
+                                    <button class="btn btn-sm btn-outline-secondary" 
+                                            @onclick="() => IncrementQuantity(item.Product.Id)">
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td>$@item.TotalPrice.ToString("F2")</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" 
+                                        @onclick="() => RemoveFromCart(item.Product.Id)">
+                                    <i class="bi bi-trash"></i> Remove
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-end fw-bold">Total:</td>
+                        <td class="fw-bold">$@_totalPrice.ToString("F2")</td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <button class="btn btn-outline-primary" @onclick="NavigateToProducts">
+                <i class="bi bi-arrow-left"></i> Continue Shopping
+            </button>
+            <div>
+                <button class="btn btn-outline-danger me-2" @onclick="ClearCart">
+                    <i class="bi bi-x-circle"></i> Clear Cart
+                </button>
+                <button class="btn btn-success" @onclick="Checkout">
+                    <i class="bi bi-credit-card"></i> Checkout
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<CartItem> _cartItems = new();
+    private decimal _totalPrice = 0;
+    
+    protected override void OnInitialized()
+    {
+        // Subscribe to cart changed event
+        CartService.OnCartChanged += StateHasChanged;
+        UpdateCartState();
+    }
+    
+    public void Dispose()
+    {
+        // Unsubscribe from cart changed event
+        CartService.OnCartChanged -= StateHasChanged;
+    }
+    
+    private void UpdateCartState()
+    {
+        _cartItems = CartService.GetCartItems();
+        _totalPrice = CartService.GetTotalPrice();
+    }
+    
+    private void IncrementQuantity(int productId)
+    {
+        var item = _cartItems.FirstOrDefault(i => i.Product.Id == productId);
+        if (item != null)
+        {
+            CartService.UpdateQuantity(productId, item.Quantity + 1);
+            UpdateCartState();
+        }
+    }
+    
+    private void DecrementQuantity(int productId)
+    {
+        var item = _cartItems.FirstOrDefault(i => i.Product.Id == productId);
+        if (item != null && item.Quantity > 1)
+        {
+            CartService.UpdateQuantity(productId, item.Quantity - 1);
+            UpdateCartState();
+        }
+    }
+    
+    private void RemoveFromCart(int productId)
+    {
+        CartService.RemoveFromCart(productId);
+        UpdateCartState();
+    }
+    
+    private void ClearCart()
+    {
+        CartService.ClearCart();
+        UpdateCartState();
+    }
+    
+    private void NavigateToProducts()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+    
+    private void Checkout()
+    {
+        // In a real application, navigate to checkout page
+        // For this lab, just clear the cart and show a confirmation
+        CartService.ClearCart();
+        NavigationManager.NavigateTo("/checkout-success");
+    }
+}
