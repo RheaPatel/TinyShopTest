@@ -1,0 +1,61 @@
+@page "/products"
+@using Products.DataEntities
+@using Store.Services
+@inject ProductService ProductService
+
+<PageTitle>Products - TinyShop</PageTitle>
+
+<h1>Products</h1>
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        @foreach (var product in products)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@product.ImageUrl" class="card-img-top" alt="@product.Name" style="height: 200px; object-fit: contain; padding: 10px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Description</p>
+                        <p class="card-text text-end fw-bold">$@product.Price.ToString("F2")</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary" @onclick="() => AddToCart(product)">Add to Cart</button>
+                            <button class="btn btn-outline-primary" @onclick="() => AddToWishlist(product.Id)">
+                                <i class="bi bi-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Product>? products;
+    private string userId = "user123"; // In a real app, this would come from authentication
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductService.GetProductsAsync();
+    }
+
+    private void AddToCart(Product product)
+    {
+        // This would be implemented in a real cart service
+    }
+
+    private async Task AddToWishlist(int productId)
+    {
+        var success = await ProductService.AddToWishlistAsync(userId, productId);
+        if (success)
+        {
+            // Could show a notification here
+        }
+    }
+}

@@ -1,0 +1,76 @@
+@page "/wishlist"
+@using Products.DataEntities
+@using Store.Services
+@inject ProductService ProductService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Wishlist - TinyShop</PageTitle>
+
+<h1>Your Wishlist</h1>
+
+@if (loading)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!wishlistItems.Any())
+{
+    <div class="alert alert-info">
+        Your wishlist is empty. <a href="/products">Continue shopping</a>
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var item in wishlistItems)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="@item.Product.ImageUrl" class="card-img-top" alt="@item.Product.Name" style="height: 200px; object-fit: contain; padding: 10px;">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.Product.Name</h5>
+                        <p class="card-text">@item.Product.Description</p>
+                        <p class="card-text text-end fw-bold">$@item.Product.Price.ToString("F2")</p>
+                        <div class="d-flex justify-content-between">
+                            <button class="btn btn-primary" @onclick="() => AddToCart(item.Product)">Add to Cart</button>
+                            <button class="btn btn-outline-danger" @onclick="() => RemoveFromWishlist(item.ProductId)">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Wishlist> wishlistItems = new();
+    private bool loading = true;
+    private string userId = "user123"; // In a real app, this would come from authentication
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadWishlist();
+    }
+
+    private async Task LoadWishlist()
+    {
+        loading = true;
+        wishlistItems = await ProductService.GetWishlistAsync(userId);
+        loading = false;
+    }
+
+    private void AddToCart(Product product)
+    {
+        // This would be implemented in a real cart service
+    }
+
+    private async Task RemoveFromWishlist(int productId)
+    {
+        var success = await ProductService.RemoveFromWishlistAsync(userId, productId);
+        if (success)
+        {
+            await LoadWishlist();
+        }
+    }
+}
