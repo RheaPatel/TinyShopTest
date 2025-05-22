@@ -10,6 +10,11 @@ public class CartService
     private List<CartItem> _cartItems = new();
     
     /// <summary>
+    /// Event that fires when the cart changes
+    /// </summary>
+    public event Action? OnChange;
+    
+    /// <summary>
     /// Add a product to the cart
     /// </summary>
     /// <param name="product">The product to add</param>
@@ -32,6 +37,8 @@ public class CartService
                 Quantity = 1
             });
         }
+        
+        NotifyStateChanged();
     }
     
     /// <summary>
@@ -45,6 +52,7 @@ public class CartService
         if (itemToRemove != null)
         {
             _cartItems.Remove(itemToRemove);
+            NotifyStateChanged();
         }
     }
     
@@ -67,6 +75,8 @@ public class CartService
             {
                 item.Quantity = quantity;
             }
+            
+            NotifyStateChanged();
         }
     }
     
@@ -91,5 +101,14 @@ public class CartService
     /// <summary>
     /// Clear all items from the cart
     /// </summary>
-    public void ClearCart() => _cartItems.Clear();
+    public void ClearCart()
+    {
+        _cartItems.Clear();
+        NotifyStateChanged();
+    }
+    
+    /// <summary>
+    /// Notify components that the cart state has changed
+    /// </summary>
+    private void NotifyStateChanged() => OnChange?.Invoke();
 }

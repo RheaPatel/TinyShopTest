@@ -1,0 +1,31 @@
+.product-thumbnail {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 50px 0;
+}
+
+.empty-cart p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #6c757d;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+}
+
+/* Style for table */
+.table {
+    margin-top: 20px;
+}
+
+.table th {
+    background-color: #f8f9fa;
+}

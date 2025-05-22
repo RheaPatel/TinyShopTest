@@ -1,6 +1,8 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject CartService CartService
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Store</a>
+        <a class="navbar-brand" href="">TinyShop</a>
     </div>
 </div>
 
@@ -15,8 +17,18 @@
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
+            <NavLink class="nav-link" href="products">
+                <span class="bi bi-grid-fill-nav-menu" aria-hidden="true"></span> Products
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="cart">
+                <span class="bi bi-cart-fill-nav-menu" aria-hidden="true"></span> Cart
+                @if (CartItemCount > 0)
+                {
+                    <span class="badge bg-primary">@CartItemCount</span>
+                }
             </NavLink>
         </div>
 
@@ -28,3 +40,16 @@
     </nav>
 </div>
 
+@code {
+    private int CartItemCount => CartService.GetTotalItemCount();
+
+    protected override void OnInitialized()
+    {
+        CartService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        CartService.OnChange -= StateHasChanged;
+    }
+}
